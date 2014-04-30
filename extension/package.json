@@ -1,0 +1,17 @@
+{
+  "id": "{19132200-c7a6-40e6-8445-f61de117d199}",
+  "name": "lor-notifier",
+  "version": "0.6",
+  "title": "LOR Notifier",
+  "description": "Display the number of unread notifications from linux.org.ru.",
+  "author": "Alexander Seleznev",
+  "license": "MPL 2.0",
+  "preferences-branch": "lor-notifier",
+  "preferences": [{
+    "name": "update-interval",
+    "title": "Update interval in seconds",
+    "type": "integer",
+    "value": 60,
+    "hidden": true
+  }]
+}
