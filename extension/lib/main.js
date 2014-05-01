@@ -27,7 +27,8 @@ var button = ActionButton({
     label: _("LOR Notifier"),
     icon: {
         "16": "./icon.png",
-        "32": "./icon-menuPanel.png"
+        "32": "./icon-menuPanel.png",
+        "64": "./icon-menuPanel@2x.png"
     },
     onClick: function(state) {
         for each (var tab in tabs) {
@@ -71,7 +72,8 @@ function updateButtonState(status, count=0) {
     }
     button.icon = {
         "16": "./icon" + n + ".png",
-        "32": "./icon" + n + "-menuPanel.png"
+        "32": "./icon" + n + "-menuPanel.png",
+        "64": "./icon" + n + "-menuPanel@2x.png"
     };
 };
 
