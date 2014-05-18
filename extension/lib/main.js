@@ -3,32 +3,39 @@
 var simplePrefs = require("sdk/simple-prefs");
 var prefs = simplePrefs.prefs;
 var tabs = require("sdk/tabs");
-var { ActionButton } = require("sdk/ui/button/action");
 var timers = require("sdk/timers");
 var Request = require("sdk/request").Request;
-
 var _ = require("sdk/l10n").get;
+
+var { StatusButton } = require("./button/status");
 
 /* ::::: ::::: */
 
 const checkUrl = "https://www.linux.org.ru/notifications-count";
 const notifUrl = "https://www.linux.org.ru/notifications";
 
-var statusList = {
-    NORMAL: 1,
-    ERROR_LOGIN: 2,
-    ERROR_CONNECT: 3
-}
+/* ::::: Status Button ::::: */
 
-/* ::::: Action Button ::::: */
-
-var button = ActionButton({
+var button = StatusButton({
     id: "lor-notifier",
+    site: "linux.org.ru",
     label: _("LOR Notifier"),
     icon: {
-        "16": "./icon.png",
-        "32": "./icon-menuPanel.png",
-        "64": "./icon-menuPanel@2x.png"
+        normal: {
+            "16": "./icon.png",
+            "32": "./icon-menuPanel.png",
+            "64": "./icon-menuPanel@2x.png"
+        },
+        notice: {
+            "16": "./iconNotification.png",
+            "32": "./iconNotification-menuPanel.png",
+            "64": "./iconNotification-menuPanel@2x.png"
+        },
+        error: {
+            "16": "./iconWarning.png",
+            "32": "./iconWarning-menuPanel.png",
+            "64": "./iconWarning-menuPanel@2x.png"
+        },
     },
     onClick: function(state) {
         for each (var tab in tabs) {
@@ -48,34 +55,10 @@ var button = ActionButton({
 
         timers.setTimeout(update, 5 * 1000);
         timers.setTimeout(update, 25 * 1000);
-    }
+    },
 });
 
-function updateButtonState(status, count=0) {
-    var n = "";
-    switch(status) {
-        case statusList.NORMAL:
-            if (count > 0) {
-                n = "Notification";
-                button.label = _("Unread notifications", count);
-                break;
-            }
-            button.label = _("No unread notifications");
-            break;
-        case statusList.ERROR_LOGIN:
-            n = "Warning";
-            button.label = _("You have to be logged", "linux.org.ru");
-            break;
-        default:
-            n = "Warning";
-            button.label = _("Server not found");
-    }
-    button.icon = {
-        "16": "./icon" + n + ".png",
-        "32": "./icon" + n + "-menuPanel.png",
-        "64": "./icon" + n + "-menuPanel@2x.png"
-    };
-};
+/* ::::: Check updates ::::: */
 
 function update() {
     Request({
@@ -84,21 +67,19 @@ function update() {
             switch (response.status) {
                 case 200:
                     let count = parseInt(response.text);
-                    updateButtonState(statusList.NORMAL, count);
+                    button.setState(button.NORMAL, count);
                     break;
                 case 403:
-                    updateButtonState(statusList.ERROR_LOGIN);
+                    button.setState(button.ERROR_LOGIN);
                     break;
                 default:
-                    updateButtonState(statusList.ERROR_CONNECT);
+                    button.setState(button.ERROR_CONNECT);
             }
         }
     }).get();
 };
 
-/* ::::: Start first update ::::: */
-
-update();
+update(); // Start first update
 
 /* ::::: Set timer ::::: */
 
@@ -119,3 +100,4 @@ function updateTimer() {
 
 updateTimer();
 simplePrefs.on("update-interval", updateTimer);
+
