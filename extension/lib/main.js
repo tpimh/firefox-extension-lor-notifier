@@ -41,19 +41,24 @@ var button = StatusButton({
         }
     },
     onClick: function(state) {
+        var tabExists = false;
         for each (var tab in tabs) {
             if (tab.url === notifUrl) {
                 tab.activate();
                 tab.reload();
-                return;
+                tabExists = true;
+                break;
             }
         }
 
-        var urls = ["about:blank", "about:newtab", "about:home"];
-        if (urls.indexOf(tabs.activeTab.url) > -1) {
-            tabs.activeTab.url = notifUrl;
-        } else {
-            tabs.open(notifUrl);
+        if (!tabExists) {
+            var urls = ["about:blank", "about:newtab", "about:home"];
+            if (urls.indexOf(tabs.activeTab.url) > -1) {
+                tabs.activeTab.url = notifUrl;
+            }
+            else {
+                tabs.open(notifUrl);
+            }
         }
 
         timers.setTimeout(update, 5 * 1000);
