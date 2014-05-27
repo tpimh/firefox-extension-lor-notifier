@@ -22,20 +22,23 @@ var button = StatusButton({
     label: _("LOR Notifier"),
     icon: {
         normal: {
-            "16": "./icon.png",
+            "18": "./icon.png",
             "32": "./icon-menuPanel.png",
+            "36": "./icon@2x.png",
             "64": "./icon-menuPanel@2x.png"
         },
         notice: {
-            "16": "./iconNotification.png",
+            "18": "./iconNotification.png",
             "32": "./iconNotification-menuPanel.png",
+            "36": "./iconNotification@2x.png",
             "64": "./iconNotification-menuPanel@2x.png"
         },
         error: {
-            "16": "./iconWarning.png",
+            "18": "./iconWarning.png",
             "32": "./iconWarning-menuPanel.png",
+            "36": "./iconWarning@2x.png",
             "64": "./iconWarning-menuPanel@2x.png"
-        },
+        }
     },
     onClick: function(state) {
         for each (var tab in tabs) {
@@ -55,7 +58,7 @@ var button = StatusButton({
 
         timers.setTimeout(update, 5 * 1000);
         timers.setTimeout(update, 25 * 1000);
-    },
+    }
 });
 
 /* ::::: Check updates ::::: */
